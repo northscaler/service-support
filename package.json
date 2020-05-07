@@ -1,6 +1,6 @@
 {
   "name": "@northscaler/service-support",
-  "version": "0.3.0-pre.0",
+  "version": "0.3.0-pre.1",
   "description": "Artifacts that assist in writing service layers effectively",
   "repository": {
     "type": "git",
