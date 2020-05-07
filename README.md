@@ -15,9 +15,9 @@ These characteristics place a burden on developers, most of which is boilerplate
 
 This library provides
 * a `ResponseStatus` enum,
-* a default `Error` formatter,
+* default `Error` & `Date` formatters,
 * helpful service method wrappers that take care of returning success & failure response objects,
-* a decorator that allows for service methods to return conventional return values & throw exceptions that get translated to proper service responses.
+* a decorator that uses aforementioned method to allow for service methods to return conventional return values & throw exceptions that get translated to proper service responses, freeing developers from having to write such boilerplate code and ensuring errors don't leak past the service boundary.
 
 ## TL;DR
 
@@ -34,7 +34,7 @@ const { CodedError } = require('@northscaler/error-support')
 const OopsyError = CodedError({ name: 'Oopsy' })
 
 class AdditionService {
-  @serviceMethod({ includeErrorStack: false })
+  @serviceMethod({ includeErrorStacks: process.env.NODE_ENV === 'production' })
   async add ({ a, b }) {
     if (typeof a !== 'number' || typeof b !== 'number') throw new OopsyError({
       msg: 'arguments not both numbers',
@@ -46,7 +46,7 @@ class AdditionService {
 }
 ```
 
-Observe service responses instead of return values or exceptions:
+Observe service responses instead of return values or thrown `Error`s:
 ```javascript
 const service = new AdditionService()
 
