@@ -6,7 +6,7 @@ const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 
-const { serviceMethod } = require('../../..')
+const { serviceMethod, DateFormat } = require('../../..')
 const ResponseStatus = require('../../main/enums/ResponseStatus')
 const { CodedError } = require('@northscaler/error-support')
 
@@ -14,19 +14,24 @@ const OopsyError = CodedError({ name: 'Oopsy' })
 
 class AdditionService {
   @serviceMethod()
-  async add ({ a, b }) {
-    return this._add({ a, b })
+  async add ({ a, b, at }) {
+    return this._add({ a, b, at })
   }
 
-  @serviceMethod({ includeErrorStack: false })
-  async addNoStacktrace ({ a, b }) {
-    return this._add({ a, b })
+  @serviceMethod({ includeErrorStacks: false })
+  async addNoStacktrace ({ a, b, at }) {
+    return this._add({ a, b, at })
   }
 
-  async _add ({ a, b }) {
+  @serviceMethod({ dateFormat: DateFormat.UNIX_MILLISECONDS })
+  async addWithUnixMillisecondsFormat ({ a, b, at }) {
+    return this._add({ a, b, at })
+  }
+
+  async _add ({ a, b, at }) {
     if (typeof a !== 'number' || typeof b !== 'number') throw new OopsyError({ msg: 'arguments not both numbers' })
 
-    return a + b
+    return { sum: a + b, at }
   }
 }
 
@@ -34,16 +39,26 @@ const adder = new AdditionService()
 
 describe('integration tests of @serviceMethod', () => {
   it('should return successful response', async function () {
-    const dto = { a: 1, b: 2 }
+    const dto = { a: 1, b: 2, at: new Date() }
 
     const expected = {
-      data: dto.a + dto.b,
+      data: { sum: dto.a + dto.b, at: dto.at.toISOString() },
       meta: {
         status: ResponseStatus.SUCCESS.name
       }
     }
 
-    const actual = await adder.add(dto)
+    let actual = await adder.add(dto)
+    console.log(JSON.stringify(actual, null, 2))
+
+    expect(actual?.meta?.elapsedMillis).to.be.at.least(0)
+    delete actual.meta.elapsedMillis
+
+    expect(actual).to.deep.equal(expected)
+
+    expected.data.at = dto.at.getTime()
+
+    actual = await adder.addWithUnixMillisecondsFormat(dto)
     console.log(JSON.stringify(actual, null, 2))
 
     expect(actual?.meta?.elapsedMillis).to.be.at.least(0)

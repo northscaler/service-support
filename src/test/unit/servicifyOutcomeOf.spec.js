@@ -12,7 +12,7 @@ const ResponseStatus = require('../../main/enums/ResponseStatus')
 
 const BadError = CodedError({ name: 'BadError' })
 
-describe('unit tests of ServiceSupport', () => {
+describe('unit tests of servicifyOutcomeOf', () => {
   it('should create service response from dto', async function () {
     const dto = { my: 'dto' }
 
