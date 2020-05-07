@@ -2,6 +2,7 @@
 
 const { AsyncAround } = require('@northscaler/aspectify')
 const servicifyOutcomeOf = require('../service/servicifyOutcomeOf')
+const DateFormat = require('../enums/DateFormat')
 
 /**
  * Decorator used to execute the decorated method in a `try`/`catch` block.
@@ -33,17 +34,26 @@ const servicifyOutcomeOf = require('../service/servicifyOutcomeOf')
  * ```
  *
  * @param {object} [arg0] The argument to be deconstructed.
- * @param {boolean} [includeErrorStack=true] Whether to include `Error` `stack`traces.
- * @param {boolean} [includeErrorCause=true] Whether to include `Error` `cause`s.
+ * @param {[Formatter]} [formatters] Formatters to be used when formatting values in returned objects or thrown `Error`s.
+ * @param {boolean} [includeErrorStacks=true] Whether to include the `Error` `stack` property if one is thrown or there are `Error`s in the return value.
+ * Ignored if `formatters` is given.
+ * @param {boolean} [includeErrorCauses=true] Whether to include the `Error` `cause` property if one is thrown or there are `Error`s in the return value.
+ * Ignored if `formatters` is given.
+ * @param {DateFormat} [dateFormat=DateFormat.ISO_8601] The date format to use.
+ * Ignored if `formatters` is given.
  */
 const serviceMethod = ({
-  includeErrorStack = true,
-  includeErrorCause = true
+  formatters,
+  includeErrorStacks = true,
+  includeErrorCauses = true,
+  dateFormat = DateFormat.ISO_8601
 } = {}) =>
   AsyncAround(async ({ thisJoinPoint }) => servicifyOutcomeOf({
     fn: thisJoinPoint.proceed,
-    includeErrorStack,
-    includeErrorCause
+    formatters,
+    includeErrorStacks,
+    includeErrorCauses,
+    dateFormat
   }))
 
 module.exports = serviceMethod

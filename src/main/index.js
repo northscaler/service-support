@@ -1,8 +1,10 @@
 'use strict'
 
 module.exports = {
-  servicifyOutcomeOf: require('./service/servicifyOutcomeOf'),
   serviceMethod: require('./aspects/serviceMethod'),
-  ErrorFormatter: require('./formatters/formatError'),
-  ResponseStatus: require('./enums/ResponseStatus')
+  servicifyOutcomeOf: require('./service/servicifyOutcomeOf'),
+  errorFormatter: require('./formatters/error-formatter'),
+  dateFormatter: require('./formatters/date-formatter'),
+  ResponseStatus: require('./enums/ResponseStatus'),
+  DateFormat: require('./enums/DateFormat')
 }
