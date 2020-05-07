@@ -3,7 +3,11 @@
 const Enumeration = require('@northscaler/enum-support')
 
 /**
- * Enumeration object of date formats
+ * Enumeration object of date formats.
+ * Values are:
+ * * `ISO_8601`
+ * * `UNIX_MILLISECONDS`
+ * * `UNIX_SECONDS`
  */
 const DateFormat = Enumeration.new({
   name: 'DateFormat',

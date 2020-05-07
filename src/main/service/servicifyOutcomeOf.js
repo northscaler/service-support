@@ -28,12 +28,6 @@ function formatValuesIn ({
 }
 
 /**
- * @typedef Formatter
- * @property {*} type The type of object to format if the value is `instanceof type`.
- * @property {function} formatter The function that takes a single argument that is the instance of the `type` and returns that value formatted.
- */
-
-/**
  * Function used to execute the given function in a `try`/`catch` block.
  * If the function returns normally, the return value is wrapped in a service response object with the following shape:
  * ```
@@ -52,6 +46,7 @@ function formatValuesIn ({
  *     name: ...,
  *     message: ...,
  *     code: ...,
+ *     info: ...,
  *     cause: ...,
  *     stack: ...,
  *   },
@@ -61,17 +56,19 @@ function formatValuesIn ({
  *   }
  * }
  * ```
+ *
+ * @private
  * @param {object} arg0 The argument to be deconstructed.
- * @param {function} fn The function to be called.
- * @param {[Formatter]} formatters Formatters to be used when formatting values in returned objects or thrown `Error`s.
+ * @param {function} arg0.fn The function to be called.
+ * @param {Formatter[]} [arg0.formatters] Formatters to be used when formatting values in returned objects or thrown `Error`s.
  * Shape is `{ type, formatter }`, where `type` is a type like `Date`, `Error`, etc and `formatter` is the formatting function.
  * Example: `{ type: Date, formatter: date => date.toString() }`.
  * Appropriate defaults are provided.
- * @param {boolean} [includeErrorStacks=true] Whether to include the `Error` `stack` property if one is thrown or there are `Error`s in the return value.
+ * @param {boolean} [arg0.includeErrorStacks=true] Whether to include the `Error` `stack` property if one is thrown or there are `Error`s in the return value.
  * Ignored if `formatters` is given.
- * @param {boolean} [includeErrorCauses=true] Whether to include the `Error` `cause` property if one is thrown or there are `Error`s in the return value.
+ * @param {boolean} [arg0.includeErrorCauses=true] Whether to include the `Error` `cause` property if one is thrown or there are `Error`s in the return value.
  * Ignored if `formatters` is given.
- * @param {DateFormat} [dateFormat=DateFormat.ISO_8601] The date format to use.
+ * @param {DateFormat} [arg0.dateFormat=DateFormat.ISO_8601] The date format to use.
  * Ignored if `formatters` is given.
  * @return {Promise<{meta: {elapsedMillis: number, status: *}, error: *}|{data: *, meta: {elapsedMillis: number, status: *}}>}
  */
@@ -118,10 +115,5 @@ async function servicifyOutcomeOf ({
     }
   }
 }
-
-// the following properties are set for convenience (and testability)
-servicifyOutcomeOf.defaultDateFormatter = defaultDateFormatter
-servicifyOutcomeOf.defaultErrorFormatter = defaultErrorFormatter
-servicifyOutcomeOf.formatValuesIn = formatValuesIn
 
 module.exports = servicifyOutcomeOf
