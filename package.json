@@ -6,7 +6,14 @@
     "type": "git",
     "url": "https://gitlab.com/northscaler-public/service-support.git"
   },
-  "keywords": [],
+  "keywords": [
+    "service",
+    "decorator",
+    "backend",
+    "back-end",
+    "server",
+    "service-layer"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=8.0.0"
