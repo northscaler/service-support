@@ -53,9 +53,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@northscaler/aspectify": "1.2.1",
-    "@northscaler/enum-support": "4.1.3",
-    "@northscaler/error-support": "3.2.1"
+    "@northscaler/aspectify": "1.2.2",
+    "@northscaler/enum-support": "4.1.4",
+    "@northscaler/error-support": "3.2.7"
   },
   "devDependencies": {
     "@babel/cli": "7.10.5",
