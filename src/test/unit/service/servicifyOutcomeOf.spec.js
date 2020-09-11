@@ -7,8 +7,8 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const { CodedError } = require('@northscaler/error-support')
 
-const { servicifyOutcomeOf } = require('../../../../index')
-const ResponseStatus = require('../../../main/enums/ResponseStatus')
+const { servicifyOutcomeOf } = require('../../../main').service
+const { ResponseStatus } = require('../../../main').enums
 
 const BadError = CodedError({ name: 'BadError' })
 
