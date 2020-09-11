@@ -35,6 +35,12 @@
     "lic": "node lic.js > LICENSE",
     "doc": "jsdoc --verbose -d docs -r -c jsdoc.json -R README.md src/main"
   },
+  "files": [
+    "dist/",
+    "docs/",
+    "src/",
+    "index.js"
+  ],
   "publishConfig": {
     "access": "public"
   },
