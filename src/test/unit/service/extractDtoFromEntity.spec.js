@@ -7,7 +7,7 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const Enumeration = require('@northscaler/enum-support')
 
-const extractDtoFromEntity = require('../../../main/service/extractDtoFromEntity')
+const { extractDtoFromEntity } = require('../../../main').service
 
 describe('unit tests of extractDtoFromEntity', () => {
   it('should work', async function () {

@@ -6,8 +6,8 @@ const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 
-const { serviceMethod, DateFormat } = require('../../..')
-const ResponseStatus = require('../../main/enums/ResponseStatus')
+const { serviceMethod } = require('../../main').decorators
+const { DateFormat, ResponseStatus } = require('../../main').enums
 const { CodedError } = require('@northscaler/error-support')
 
 const OopsyError = CodedError({ name: 'Oopsy' })
