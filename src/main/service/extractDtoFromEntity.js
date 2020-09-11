@@ -5,6 +5,20 @@ const formatEnumeration = require('../formatters/enumeration-formatter')
 const DateFormat = require('../enums/DateFormat')
 const Enumeration = require('@northscaler/enum-support')
 
+/**
+ * Extracts a [data transfer object (DTO)](https://martinfowler.com/eaaCatalog/dataTransferObject.html) from the given entity.
+ * The entity normally is an instance of a class with data properties whose names begin with the underscore character (`_`).
+ * By default, this will descend recursively through the given object and drop the leading underscore prefix from its keys and convert any convertible values, mainly `Date`s to ISO-8601 strings and [`Enumeration` instances](https://www.npmjs.com/package/@northscaler/enum-support) to just their `name`s.
+ * All methods found are excluded from the returned DTO.
+ * Each formatter is customizable.
+ *
+ * @param {*} entity The entity from which to extract a data transfer object (DTO).
+ * @param {object} arg1 The argument to be deconstructed.
+ * @param {string|RegExp} [arg1.keyReplacementRegEx=/^_/] The key replacement regular expression given to the `replace` method of `String`; if falsey, no key replacement is performed.
+ * @param {string|function} [arg1.keyReplacement=''] The key replacement given to the `replace` method of `String`.
+ * @param {function} [arg1.dateFormatter] The formatter of `Date`s; defaults to `toISOString()` on `Date`.
+ * @param {function} [arg1.enumerationFormatter] The formatter of [`Enumeration` instances](https://www.npmjs.com/package/@northscaler/enum-support); defaults to returning the `name`.
+ */
 function extractDtoFromEntity (entity, {
   keyReplacementRegEx = /^_/,
   keyReplacement = '',

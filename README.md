@@ -28,7 +28,7 @@ $ npm i --save @northscaler/service-support
 
 Write a service class:
 ```javascript
-const { serviceMethod } = require('@northscaler/service-support')
+const { serviceMethod } = require('@northscaler/service-support').decorators
 const { CodedError } = require('@northscaler/error-support')
 
 const OopsyError = CodedError({ name: 'Oopsy' })
@@ -78,3 +78,17 @@ console.log(JSON.stringify(service.add({a: "1", b: 2})), null, 2)
 //   }
 // }
 ```
+
+## Enumerations
+Import/require from `enums`.
+
+* `DateFormat`: convenient enum that includes a `format` method to format `Date`s.
+* `ResponseStatus`: indicates the outcome of a service method call, with values `SUCCESS`, `FAILURE` & `PARTIAL` (for bulk operations).
+
+## Service implementation helpers
+Import/require from `service`.
+
+* `extractDtoFromEntity`: Extracts the state from a persistent entity.
+See docs for more information.
+* `servicifyOutcomeOf`: The actual advice used by the `@serviceMethod` decorator.
+See docs for more information.
