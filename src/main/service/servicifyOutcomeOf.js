@@ -79,8 +79,6 @@ async function servicifyOutcomeOf ({
   includeErrorCauses = true,
   dateFormat = DateFormat.ISO_8601
 } = {}) {
-  const begin = Date.now()
-
   formatters = formatters || [{
     type: Error,
     formatter: error => defaultErrorFormatter({
@@ -97,9 +95,12 @@ async function servicifyOutcomeOf ({
   }]
   formatters = Array.isArray(formatters) ? formatters : [formatters]
 
+  const begin = Date.now()
+
   try {
+    const value = await fn()
     return {
-      data: formatValuesIn({ value: await fn(), formatters }),
+      data: formatValuesIn({ value, formatters }),
       meta: {
         status: ResponseStatus.SUCCESS.name,
         elapsedMillis: Date.now() - begin
