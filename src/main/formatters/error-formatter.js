@@ -13,7 +13,6 @@
 /**
  * Formats the given error as a plain object.
  *
- * @private
  * @param {object} [arg0] The argument to be deconstructed.
  * @param {object} [error] The `Error` (or `Error`-like object) to be formatted.
  * @param {boolean} [includeStack=true] Whether to include the `stack` property.
