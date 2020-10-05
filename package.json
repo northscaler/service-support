@@ -47,6 +47,12 @@
     "pre-commit": "run-s lint-staged",
     "pre-push": "run-s test"
   },
+  "files": [
+    "dist/",
+    "docs/",
+    "src/",
+    "index.js"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run pre-commit",
