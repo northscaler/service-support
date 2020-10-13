@@ -17,7 +17,7 @@ describe('unit tests of extractDtoFromEntity', () => {
       _zero: false,
       _one: 1,
       _two: {
-        _three: 3,
+        three: 3, // throw one in that doesn't have the _ prefix
         _four: null,
         _five: undefined,
         _six: [6, -6, {
@@ -54,7 +54,7 @@ describe('unit tests of extractDtoFromEntity', () => {
       _zero: false,
       _one: 1,
       _two: {
-        _three: 3,
+        three: 3,
         _four: null,
         _five: undefined,
         _six: [6, -6, { _nine: 9 }],
