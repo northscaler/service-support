@@ -63,4 +63,24 @@ describe('unit tests of extractDtoFromEntity', () => {
       _ten: 0
     })
   })
+
+  it('should work with additional property names', function () {
+    class Entity {
+      constructor () {
+        this.foo = Math.random()
+      }
+
+      set foo (value) { this._foo = value }
+
+      get foo () { return this._foo }
+
+      get bar () { return 'bar-' + this.foo }
+    }
+
+    const f = new Entity()
+    expect(extractDtoFromEntity(f)).to.deep.equal({ foo: f.foo })
+    expect(extractDtoFromEntity(f, {
+      additionalPropertyNames: ['bar']
+    })).to.deep.equal({ foo: f.foo, bar: 'bar-' + f.foo })
+  })
 })

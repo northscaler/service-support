@@ -18,12 +18,15 @@ const Enumeration = require('@northscaler/enum-support')
  * @param {string|function} [arg1.keyReplacement=''] The key replacement given to the `replace` method of `String`.
  * @param {function} [arg1.dateFormatter] The formatter of `Date`s; defaults to `toISOString()` on `Date`.
  * @param {function} [arg1.enumerationFormatter] The formatter of [`Enumeration` instances](https://www.npmjs.com/package/@northscaler/enum-support); defaults to returning the `name`.
+ * @param {string[]} [arg1.additionalPropertyNames] The any additional property names you want to pull from the source object that aren't returned by `Object.keys`.
+ * Usually used with instances of `class`es that have read-only or derived properties (getter with no setter).
  */
 function extractDtoFromEntity (entity, {
   keyReplacementRegEx = /^_/,
   keyReplacement = '',
   dateFormatter = date => formatDate({ date, format: DateFormat.ISO_8601 }),
-  enumerationFormatter = enumeration => formatEnumeration({ enumeration, useName: true })
+  enumerationFormatter = enumeration => formatEnumeration({ enumeration, useName: true }),
+  additionalPropertyNames = []
 } = {}) {
   if (keyReplacementRegEx) keyReplacementRegEx = new RegExp(keyReplacementRegEx)
 
@@ -41,7 +44,7 @@ function extractDtoFromEntity (entity, {
   if (Enumeration.isEnumerationInstance(entity)) return enumerationFormatter(entity)
   if (typeof entity !== 'object') return entity
 
-  return Object.keys(entity).reduce((dto, key) => {
+  return Object.keys(entity).concat(additionalPropertyNames).reduce((dto, key) => {
     const newKey = keyReplacementRegEx ? key.replace(keyReplacementRegEx, keyReplacement) : key
 
     const type = typeof entity[key]
