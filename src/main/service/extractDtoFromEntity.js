@@ -37,7 +37,7 @@ function extractDtoFromEntity (entity, {
   }
 
   if (!entity) return entity
-  if (Array.isArray(entity)) return entity.map(it => recurse(entity))
+  if (Array.isArray(entity)) return entity.map(it => recurse(it))
   if (Enumeration.isEnumerationInstance(entity)) return enumerationFormatter(entity)
   if (typeof entity !== 'object') return entity
 
