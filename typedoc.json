@@ -1,0 +1,5 @@
+{
+  "entryPoints": ["src/main/index.ts", "src/main/errors/index.ts"],
+  "out": "docs",
+  "includeVersion": true
+}

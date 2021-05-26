@@ -14,22 +14,23 @@ const OopsyError = CodedError({ name: 'Oopsy' })
 
 class AdditionService {
   @serviceMethod()
-  async add ({ a, b, at }) {
+  async add({ a, b, at }) {
     return this._add({ a, b, at })
   }
 
   @serviceMethod({ includeErrorStacks: false })
-  async addNoStacktrace ({ a, b, at }) {
+  async addNoStacktrace({ a, b, at }) {
     return this._add({ a, b, at })
   }
 
   @serviceMethod({ dateFormat: DateFormat.UNIX_MILLISECONDS })
-  async addWithUnixMillisecondsFormat ({ a, b, at }) {
+  async addWithUnixMillisecondsFormat({ a, b, at }) {
     return this._add({ a, b, at })
   }
 
-  async _add ({ a, b, at }) {
-    if (typeof a !== 'number' || typeof b !== 'number') throw new OopsyError({ msg: 'arguments not both numbers' })
+  async _add({ a, b, at }) {
+    if (typeof a !== 'number' || typeof b !== 'number')
+      throw new OopsyError({ msg: 'arguments not both numbers' })
 
     return { sum: a + b, at }
   }
@@ -44,8 +45,8 @@ describe('integration tests of @serviceMethod', () => {
     const expected = {
       data: { sum: dto.a + dto.b, at: dto.at.toISOString() },
       meta: {
-        status: ResponseStatus.SUCCESS.name
-      }
+        status: ResponseStatus.SUCCESS.name,
+      },
     }
 
     let actual = await adder.add(dto)
@@ -74,11 +75,11 @@ describe('integration tests of @serviceMethod', () => {
       error: {
         name: 'Oopsy',
         message: 'E_OOPSY: arguments not both numbers',
-        code: 'E_OOPSY'
+        code: 'E_OOPSY',
       },
       meta: {
-        status: ResponseStatus.FAILURE.name
-      }
+        status: ResponseStatus.FAILURE.name,
+      },
     }
 
     let actual = await adder.add(dto)

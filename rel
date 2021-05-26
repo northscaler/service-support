@@ -1,17 +1,56 @@
 #!/usr/bin/env bash
 
-THIS_ABSPATH="$(cd "$(dirname "$0")"; pwd)"
+# This script customizes Northscaler's release scripts to use NYBC's needs.
+# See https://gitlab.com/northscaler-public/release-management/-/blob/master/readme.md
 
+set -e
+
+export PRE=${PRE:-dev}       # "dev" is the pre release suffix by default
+export RC=${RC:-rc}          # "rc" is the rc release candidate suffix by default
+export MASTER=${MASTER:-dev} # "dev" is the main branch by default
+
+THIS_ABSPATH="$(
+  cd "$(dirname "$0")"
+  pwd
+)"
 TYPES=${TYPES:-nodejs}
 
-REF=${REF:-master}
+if [ "$1" == "branch" ]; then # release a branch -- CI must be configured to publish based on regex below
+  CURRENT_BRANCH="$(git branch --show-current)"
+  CURRENT_VERSION="$(node -e 'console.log(require("./package.json").version)')"
+  CURRENT_SHA="$(git rev-parse --verify --short HEAD)"
+  git tag "$CURRENT_VERSION+$CURRENT_BRANCH.$CURRENT_SHA"
+  git push --tags
+  exit 0
+fi
+
+REF=${REF:-master} # this is the branch of release-management we're using
 get() {
   curl -s -o $1 https://gitlab.com/northscaler-public/release-management/-/raw/$REF/$1 && chmod +x $1
 }
 
 get release
 for it in $TYPES; do
-    get release-$it
+  get release-$it
 done
 
-./release $(echo -n "$TYPES" | tr ' ' '+') $@
+TYPES="$(echo -n "$TYPES" | tr ' ' '+')"
+
+ARGS="$@"
+if [ "$1" == "qa" ]; then # a qa prerelease is a $PRE prerelease with an additional tag ending in "+qa"
+  shift
+  ARGS="$PRE $@"
+  QA=1
+fi
+
+export HUSKY_SKIP_HOOKS=1
+export GIT_COMMIT_OPTS='--no-verify'
+export GIT_PUSH_OPTS='--no-verify'
+
+./release $TYPES $ARGS
+
+if [ -n "$QA" ]; then # add "+qa" suffix to indicate a QA release
+  PRERELEASE_TAGNAME="$(git describe --abbrev=0 --tags)"
+  git tag "$PRERELEASE_TAGNAME+qa" "$PRERELEASE_TAGNAME"
+  git push --tags
+fi

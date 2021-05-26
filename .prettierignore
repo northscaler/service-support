@@ -1,0 +1,9 @@
+tag-nodejs
+.idea/
+.nyc_output/
+coverage/
+LICENSE*
+.DS_Store
+.gitignorerc
+.npmrc
+.nvmrc
