@@ -285,53 +285,59 @@ export function elapsedTime({
   }
 }
 
-export const servicify = <RequestDataType, ResponseDataType, ContextType>({
-  fn,
-  formatters,
-  includeErrorStacks = true,
-  includeErrorCauses = true,
-  dateFormat = DateFormat.ISO_8601,
-  useEnumerationNames = true,
-}: {
+export const servicify = <RequestDataType, ResponseDataType, ContextType>(
   fn: (
     request?: RequestDataType,
     context?: ContextType
-  ) => Promise<ResponseDataType>
-  formatters?: FormatterSpec[]
-  includeErrorStacks?: boolean
-  includeErrorCauses?: boolean
-  dateFormat?: DateFormat
-  useEnumerationNames?: boolean
-}): ServiceMethod<RequestDataType, ResponseDataType, ContextType> => {
-  return (smr: ServiceMethodRequest<RequestDataType, ContextType>) =>
-    servicifyOutcomeOf({
-      fn: () => fn(smr?.data, smr?.meta?.context),
-      formatters,
-      includeErrorStacks,
-      includeErrorCauses,
-      dateFormat,
-      useEnumerationNames,
-    })
+  ) => Promise<ResponseDataType>,
+  {
+    formatters,
+    includeErrorStacks = true,
+    includeErrorCauses = true,
+    dateFormat = DateFormat.ISO_8601,
+    useEnumerationNames = true,
+  }: {
+    formatters?: FormatterSpec[]
+    includeErrorStacks?: boolean
+    includeErrorCauses?: boolean
+    dateFormat?: DateFormat
+    useEnumerationNames?: boolean
+  } = {}
+): ServiceMethod<RequestDataType, ResponseDataType, ContextType> => {
+  return (
+    serviceMethodRequest: ServiceMethodRequest<RequestDataType, ContextType>
+  ) =>
+    servicifyOutcomeOf(
+      () => fn(serviceMethodRequest?.data, serviceMethodRequest?.meta?.context),
+      {
+        formatters,
+        includeErrorStacks,
+        includeErrorCauses,
+        dateFormat,
+        useEnumerationNames,
+      }
+    )
 }
 
 export const servicifyOutcomeOf = async <
   ResponseDataType = any,
   ContextType = any
->({
-  fn,
-  formatters,
-  includeErrorStacks = true,
-  includeErrorCauses = true,
-  dateFormat = DateFormat.ISO_8601,
-  useEnumerationNames = true,
-}: {
-  fn: () => Promise<ResponseDataType>
-  formatters?: FormatterSpec[]
-  includeErrorStacks?: boolean
-  includeErrorCauses?: boolean
-  dateFormat?: DateFormat
-  useEnumerationNames?: boolean
-}): Promise<ServiceMethodResponse<ResponseDataType>> => {
+>(
+  fn: () => Promise<ResponseDataType>,
+  {
+    formatters,
+    includeErrorStacks = true,
+    includeErrorCauses = true,
+    dateFormat = DateFormat.ISO_8601,
+    useEnumerationNames = true,
+  }: {
+    formatters?: FormatterSpec[]
+    includeErrorStacks?: boolean
+    includeErrorCauses?: boolean
+    dateFormat?: DateFormat
+    useEnumerationNames?: boolean
+  }
+): Promise<ServiceMethodResponse<ResponseDataType>> => {
   const actualFormatters: FormatterSpec[] = (formatters ||
     createDefaultFormatters({
       includeErrorStacks,

@@ -15,29 +15,30 @@ stages:
   - build
   - publish
 
-build-10.3.0:
-  stage: build
-  image: node:10.3.0-alpine
-  script:
-    - npm run build
-
 build-12:
   stage: build
-  image: node:12.16.3-alpine
+  image: node:12.0.0-alpine
   script:
-    - npm run build
+    - npm run build-ci
 
 build-14:
   stage: build
-  image: node:14.1.0-alpine
+  image: node:14.0.0-alpine
   script:
-    - npm run build
+    - npm run build-ci
+
+build-16:
+  stage: build
+  image: node:16.0.0-alpine
+  script:
+    - npm run build-ci
 
 publish:
   stage: publish
-  image: node:14.1.0-alpine
+  image: node:16.0.0-alpine
   script:
     - *authenticate-to-npmjs
+    - npm install
     - npm run make-distribution
     - export RM_TMP_TAG=cicd-$(date +%s)
     - npm publish --access public --tag $RM_TMP_TAG
