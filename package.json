@@ -63,9 +63,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@northscaler/aspectify": "1.2.5",
-    "@northscaler/enum-support": "4.2.9",
-    "@northscaler/error-support": "3.4.3",
+    "@northscaler/aspectify": "1.3.0",
+    "@northscaler/enum-support": "4.3.0",
+    "@northscaler/error-support": "3.5.0",
     "npm-run-all": "4.1.5"
   },
   "devDependencies": {
